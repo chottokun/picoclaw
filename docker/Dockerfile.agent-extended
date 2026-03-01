@@ -1,0 +1,6 @@
+FROM docker.io/sipeed/picoclaw:latest
+USER root
+RUN apk add --no-cache ca-certificates tzdata curl python3 py3-pip
+# Assuming the default user is root or similar, we stay root if needed for tools, 
+# or switch back to the original user if known. 
+# Most picoclaw images run as root by default in Docker.

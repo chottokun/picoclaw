@@ -1,0 +1,39 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    # Do not include 'ports' to prevent external access.
+    # Add "127.0.0.1:11434:11434" only if you need access from the host's localhost.
+    volumes:
+      - ollama_storage:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    # Communication remains internal to the Docker network.
+    restart: always
+
+  picoclaw-agent:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.agent-extended
+    image: picoclaw-extended:latest
+    depends_on:
+      - ollama
+
+  picoclaw-gateway:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.agent-extended
+    image: picoclaw-extended:latest
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    depends_on:
+      - ollama
+
+volumes:
+  ollama_storage:

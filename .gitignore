@@ -47,3 +47,6 @@ dist/
 
 # Windows Application Icon/Resource
 *.syso
+
+# PicoClaw docker specific
+docker/data/workspace/

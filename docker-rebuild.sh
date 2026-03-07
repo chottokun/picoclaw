@@ -13,4 +13,5 @@ cd docker
 docker compose down
 docker compose pull
 docker compose --profile gateway up -d
-docker compose logs -f
+docker compose logs ollama picoclaw-gateway -f
+

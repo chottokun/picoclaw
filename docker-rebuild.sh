@@ -10,8 +10,8 @@ docker stop picoclaw-gateway || true
 docker rm picoclaw-gateway || true
 
 cd docker
-docker compose down
-docker compose pull
-docker compose --profile gateway up -d
-docker compose logs ollama picoclaw-gateway -f
+docker compose -f docker-compose.yml -f docker-compose.override.yml down
+docker compose -f docker-compose.yml -f docker-compose.override.yml pull
+docker compose -f docker-compose.yml -f docker-compose.override.yml --profile gateway up -d
+docker compose -f docker-compose.yml -f docker-compose.override.yml logs picoclaw-gateway -f
 

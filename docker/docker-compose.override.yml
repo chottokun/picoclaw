@@ -2,10 +2,13 @@ services:
   ollama:
     image: ollama/ollama:latest
     container_name: ollama
-    # Do not include 'ports' to prevent external access.
-    # Add "127.0.0.1:11434:11434" only if you need access from the host's localhost.
     volumes:
       - ollama_storage:/root/.ollama
+    restart: always
+
+  ollama-gpu:
+    extends: ollama
+    container_name: ollama-gpu
     deploy:
       resources:
         reservations:
@@ -13,8 +16,8 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
-    # Communication remains internal to the Docker network.
-    restart: always
+    profiles:
+      - gpu
 
   picoclaw-agent:
     build:

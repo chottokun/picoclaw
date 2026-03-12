@@ -9,9 +9,15 @@ docker run --rm -v "$(pwd):/host" busybox sh -c "cp /host/config/config.json /ho
 docker stop picoclaw-gateway || true
 docker rm picoclaw-gateway || true
 
+PROFILES="--profile gateway"
+if [[ "$1" == "--gpu" ]]; then
+  echo "Enabling GPU profile..."
+  PROFILES="$PROFILES --profile gpu"
+fi
+
 cd docker
-docker compose -f docker-compose.yml -f docker-compose.override.yml down
-docker compose -f docker-compose.yml -f docker-compose.override.yml pull
-docker compose -f docker-compose.yml -f docker-compose.override.yml --profile gateway up -d
+docker compose -f docker-compose.yml -f docker-compose.override.yml $PROFILES down
+docker compose -f docker-compose.yml -f docker-compose.override.yml build
+docker compose -f docker-compose.yml -f docker-compose.override.yml $PROFILES up -d
 docker compose -f docker-compose.yml -f docker-compose.override.yml logs picoclaw-gateway -f
 
